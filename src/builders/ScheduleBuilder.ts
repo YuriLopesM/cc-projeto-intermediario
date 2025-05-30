@@ -1,4 +1,4 @@
-import { Schedule } from '@/types'
+import { AppointmentType, Schedule } from '@/types'
 import { generateId, generatePeriod } from '@/utils'
 
 export class ScheduleBuilder {
@@ -16,7 +16,7 @@ export class ScheduleBuilder {
     ) as string
     this.schedule.appointmentType = formData.get(
       'newScheduleAppointmentType'
-    ) as string
+    ) as AppointmentType
     this.schedule.period = formData.get('newSchedulePeriod') as string
     this.schedule.date = formData.get('newScheduleDate') as string
     this.schedule.description = formData.get('newScheduleDescription') as string
@@ -29,7 +29,7 @@ export class ScheduleBuilder {
     this.schedule.healthCenter = healthCenter
     this.schedule.appointmentType = formData.get(
       'newScheduleAppointmentType'
-    ) as string
+    ) as AppointmentType
     this.schedule.hour = hour
     this.schedule.date = formData.get('newScheduleDate') as string
     this.schedule.description = formData.get('newScheduleDescription') as string

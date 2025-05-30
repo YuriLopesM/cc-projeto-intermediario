@@ -12,7 +12,7 @@ export type Schedule = {
 }
 
 type ScheduleStatus = 'Confirmado' | 'Aguardando aprovação' | 'Cancelado'
-type AppointmentType = 'Consulta' | 'Exame' | 'Retorno' | 'Cirurgia'
+export type AppointmentType = 'Consulta' | 'Exame' | 'Retorno' | 'Cirurgia'
 
 export type Client = {
   id: string
