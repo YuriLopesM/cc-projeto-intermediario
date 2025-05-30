@@ -1,10 +1,11 @@
-import React from "react";
-import { FaTimesCircle, FaClock, FaCheckCircle } from "react-icons/fa";
+import { Schedule } from "@/types";
+import dayjs from "dayjs";
+import { FaCheckCircle, FaClock, FaTimesCircle } from "react-icons/fa";
 
 type HistoryRowProps = {
   doctorName: string;
   scheduleDate: Date | string;
-  status: "Confirmado" | "Aguardando aprovação" | "Cancelado";
+  status: Schedule["status"];
 };
 
 export function HistoryRow({
@@ -15,7 +16,8 @@ export function HistoryRow({
   return (
     <div className="bg-gray-400 p-4 rounded font-bold text-xl flex text-white w-full justify-between">
       <div>
-        {doctorName} - {String(scheduleDate)} - {status}
+        {doctorName} - {dayjs(scheduleDate).format("DD/MM/YYYY HH:mm")} -{" "}
+        {status}
       </div>
       <div className="">
         {status === "Confirmado" && (

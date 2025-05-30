@@ -1,66 +1,76 @@
-import { FormEvent, useState } from "react";
-import { QueryClient, dehydrate, useMutation, useQuery, useQueryClient } from "react-query";
-import { postSchedule, Schedule } from "../../actions/schedules";
-import BackButton from "@/components/BackButton";
-import { getUserLogged } from "@/actions/userLogged";
+import { ScheduleBuilder } from '@/builders/ScheduleBuilder'
+import { BackButton } from '@/components'
+import { getUserAuthenticated, postSchedule } from '@/services'
+import { Schedule, UserAuthenticated } from '@/types'
+import { FormEvent, useMemo, useState } from 'react'
+import {
+  QueryClient,
+  dehydrate,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from 'react-query'
 
-export default function newSchedules() {
-  const userLogged = useQuery({ queryKey: ["userLogged"], queryFn: getUserLogged });
-  const name = userLogged.data?.[0]?.name;
-  const patientName = typeof name === "string" ? name : "";
+export default function NewPatientAppointment() {
+  const userAuthenticated = useQuery<UserAuthenticated | null>({
+    queryKey: ['userAuthenticated'],
+    queryFn: getUserAuthenticated,
+  })
+  const name = userAuthenticated.data?.name
+  const patientName = typeof name === 'string' ? name : ''
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('')
 
-  function addSchedule(event: FormEvent) {
-    event.preventDefault();
+  const requiredFields = useMemo(
+    () => [
+      'newScheduleHealthCenter',
+      'newScheduleAppointmentType',
+      'newSchedulePeriod',
+      'newScheduleDate',
+      'newScheduleDescription',
+    ],
+    []
+  )
 
-    const form = event.currentTarget as HTMLFormElement;
-    const formData = new FormData(form);
-    let scheduleDate = "";
-    console.log(formData.get("newScheduleDate"));
-    if (
-      formData.get("newScheduleHealthCenter") !== "" &&
-      formData.get("newScheduleAppointmentType") !== "" &&
-      formData.get("newSchedulePeriod") !== "" &&
-      formData.get("newScheduleDate") !== "" &&
-      formData.get("newScheduleDescription")
-    ) {
-      scheduleDate = formData.get("newScheduleDate") as string;
-      const newSchedule = {
-        patientName: patientName,
-        healthCenter: formData.get("newScheduleHealthCenter"),
-        appointmentType: formData.get("newScheduleAppointmentType"),
-        period: formData.get("newSchedulePeriod"),
-        date: `${scheduleDate.substring(8, 10)}/${scheduleDate.substring(
-          5,
-          7
-        )}/${scheduleDate.substring(0, 4)}`,
-        description: formData.get("newScheduleDescription"),
-        status: "Aguardando aprovação",
-        doctorName: "",
-        hour: "",
-      } as Schedule;
-
-      mutationPost.mutate(newSchedule);
-
-      form.reset();
-      setErrorMessage("");
-    } else {
-      setErrorMessage("Preencha todos os campos!");
-    }
-  }
-
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const mutationPost = useMutation(
     (newSchedule: Schedule) => postSchedule(newSchedule),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("schedules");
-        alert("Agendamento Confirmado")
+        queryClient.invalidateQueries('schedules')
+        alert('Agendamento Confirmado')
       },
     }
-  );
+  )
+
+  function isFormDataValid(formData: FormData, requiredFields: string[]) {
+    return requiredFields.every(
+      (field) =>
+        formData.get(field) !== null &&
+        formData.get(field)?.toString().trim() !== ''
+    )
+  }
+
+  function addSchedule(event: FormEvent) {
+    event.preventDefault()
+
+    const form = event.currentTarget as HTMLFormElement
+    const formData = new FormData(form)
+
+    if (!isFormDataValid(formData, requiredFields)) {
+      setErrorMessage('Preencha todos os campos!')
+      return
+    }
+
+    const builder = new ScheduleBuilder()
+    const newSchedule = builder.fromPatientForm(formData, patientName).build()
+
+    mutationPost.mutate(newSchedule)
+
+    form.reset()
+    setErrorMessage('')
+  }
 
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center">
@@ -221,20 +231,20 @@ export default function newSchedules() {
         </fieldset>
       </form>
     </div>
-  );
+  )
 }
 
 export async function getStaticProps() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient()
 
   await queryClient.prefetchQuery({
-    queryKey: ["userLogged"],
-    queryFn: getUserLogged,
-  });
+    queryKey: ['userAuthenticated'],
+    queryFn: getUserAuthenticated,
+  })
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
-  };
+  }
 }

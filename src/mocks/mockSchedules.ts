@@ -1,0 +1,53 @@
+import { Schedule } from '@/types'
+import { generateId } from '@/utils'
+
+export const mockSchedules: Schedule[] = [
+  {
+    id: generateId(),
+    patientName: 'Carlos Andrade',
+    healthCenter: 'Centro de Saúde',
+    appointmentType: 'Consulta',
+    period: 'Manhã',
+    date: new Date('2025-06-03'),
+    hour: '09:00',
+    doctorName: 'Dra. Ana',
+    status: 'Aguardando aprovação',
+    description: 'Avaliação de dor nas costas',
+  },
+  {
+    id: generateId(),
+    patientName: 'Mariana Silva',
+    healthCenter: 'Centro de Saúde',
+    appointmentType: 'Retorno',
+    period: 'Tarde',
+    date: new Date('2025-06-04'),
+    hour: '14:30',
+    doctorName: 'Dr. Artur',
+    status: 'Confirmado',
+    description: 'Acompanhamento de tratamento',
+  },
+  {
+    id: generateId(),
+    patientName: 'José Lima',
+    healthCenter: 'Centro de Saúde',
+    appointmentType: 'Exame',
+    period: 'Manhã',
+    date: new Date('2025-06-05'),
+    hour: '08:00',
+    doctorName: 'Dra. Júlia',
+    status: 'Cancelado',
+    description: 'Cancelado por incompatibilidade de horário',
+  },
+  {
+    id: generateId(),
+    patientName: 'Fernanda Rocha',
+    healthCenter: 'Teste',
+    appointmentType: 'Consulta',
+    period: 'Noite',
+    date: new Date('2025-06-06'),
+    hour: '19:00',
+    doctorName: 'Dra. Ana',
+    status: 'Aguardando aprovação',
+    description: 'Primeira consulta após triagem',
+  },
+]

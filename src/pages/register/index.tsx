@@ -1,12 +1,15 @@
+import { BackButton } from "@/components";
+import { postClient } from "@/services";
 import { FormEvent, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import BackButton from "@/components/BackButton";
-import { postClient, Client } from "../../actions/clients";
+
+import { Client } from "@/types";
 
 const isFormDataValid = (formData: FormData, fields: string[]) =>
   fields.every((field) => formData.get(field)?.toString().trim() !== "");
 
 const buildClientFromFormData = (formData: FormData): Client => ({
+  id: crypto.randomUUID(),
   name: formData.get("name") as string,
   number: formData.get("phoneNumber") as string,
   cpf: formData.get("cpf") as string,
@@ -64,12 +67,19 @@ export default function Register() {
           CADASTRO DE USUÁRIO
         </h1>
       </div>
-      <form onSubmit={addUser} method="post" className="space-y-4 text-left mt-10">
+      <form
+        onSubmit={addUser}
+        method="post"
+        className="space-y-4 text-left mt-10"
+      >
         <fieldset disabled={mutationPost.isLoading}>
           <div className="grid grid-cols-2 gap-4">
             {/* Nome */}
             <div className="col-span-2">
-              <label htmlFor="name" className="block font-bold text-blue-950 text-2xl">
+              <label
+                htmlFor="name"
+                className="block font-bold text-blue-950 text-2xl"
+              >
                 Nome:
               </label>
               <input
@@ -82,7 +92,10 @@ export default function Register() {
 
             {/* Número de Telefone */}
             <div>
-              <label htmlFor="phoneNumber" className="block font-bold text-blue-950 text-2xl">
+              <label
+                htmlFor="phoneNumber"
+                className="block font-bold text-blue-950 text-2xl"
+              >
                 Número de Telefone:
               </label>
               <input
@@ -95,7 +108,10 @@ export default function Register() {
 
             {/* CPF */}
             <div>
-              <label htmlFor="cpf" className="block font-bold text-blue-950 text-2xl">
+              <label
+                htmlFor="cpf"
+                className="block font-bold text-blue-950 text-2xl"
+              >
                 CPF:
               </label>
               <input
@@ -108,7 +124,10 @@ export default function Register() {
 
             {/* Bairro */}
             <div>
-              <label htmlFor="neighborhood" className="block font-bold text-blue-950 text-2xl">
+              <label
+                htmlFor="neighborhood"
+                className="block font-bold text-blue-950 text-2xl"
+              >
                 Bairro:
               </label>
               <input
@@ -122,7 +141,10 @@ export default function Register() {
             {/* Cidade e Estado */}
             <div className="flex space-x-4 col-span-2">
               <div>
-                <label htmlFor="city" className="block font-bold text-blue-950 text-2xl">
+                <label
+                  htmlFor="city"
+                  className="block font-bold text-blue-950 text-2xl"
+                >
                   Cidade:
                 </label>
                 <select
@@ -140,7 +162,10 @@ export default function Register() {
               </div>
 
               <div>
-                <label htmlFor="state" className="block font-bold text-blue-950 text-2xl">
+                <label
+                  htmlFor="state"
+                  className="block font-bold text-blue-950 text-2xl"
+                >
                   Estado:
                 </label>
                 <select
@@ -159,7 +184,10 @@ export default function Register() {
 
             {/* Rua */}
             <div>
-              <label htmlFor="street" className="block font-bold text-blue-950 text-2xl">
+              <label
+                htmlFor="street"
+                className="block font-bold text-blue-950 text-2xl"
+              >
                 Rua:
               </label>
               <input
@@ -172,7 +200,10 @@ export default function Register() {
 
             {/* Nº */}
             <div>
-              <label htmlFor="addressNumber" className="block font-bold text-blue-950 text-2xl">
+              <label
+                htmlFor="addressNumber"
+                className="block font-bold text-blue-950 text-2xl"
+              >
                 Nº:
               </label>
               <input
