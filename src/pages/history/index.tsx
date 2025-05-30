@@ -1,23 +1,15 @@
-import { HistoryRow } from "@/components/HistoryRow";
-import React from "react";
-import BackButton from "@/components/BackButton";
-import type { GetServerSideProps } from "next";
+import { BackButton, HistoryRow } from '@/components'
+import { getSchedules, getUserAuthenticated } from '@/services'
+import { Schedule } from '@/types'
+import { QueryClient, dehydrate, useQuery } from 'react-query'
 
-type HistorySchedule = {
-  historySchedule: Schedule[];
-};
+export default function History() {
+  const schedulesQuery = useQuery<Schedule[]>({
+    queryKey: ['schedule'],
+    queryFn: getSchedules,
+  })
+  const schedules = schedulesQuery.data || []
 
-export const getServerSideProps: GetServerSideProps<{
-  historySchedule: Schedule[];
-}> = async () => {
-  const response = await fetch("http://localhost:3000/api/schedule");
-
-  const historySchedule = await response.json();
-
-  return { props: { historySchedule } };
-};
-
-export default function History({ historySchedule }: HistorySchedule) {
   return (
     <div className="h-screen flex w-screen justify-center items-center">
       <BackButton customClass="mr-8 -ml-[439px] mt-4 h-10" />
@@ -25,14 +17,30 @@ export default function History({ historySchedule }: HistorySchedule) {
         <h1 className="text-2xl mx-auto font-bold text-primary">
           HISTÓRICO DE CONSULTAS
         </h1>
-        {historySchedule.map((schedule) => (
+        {schedules.map((schedule) => (
           <HistoryRow
             doctorName={schedule.doctorName}
             scheduleDate={schedule.date}
             status={schedule.status}
+            key={schedule.id}
           />
         ))}
       </div>
     </div>
-  );
+  )
+}
+
+export async function getStaticProps() {
+  const queryClient = new QueryClient()
+
+  await queryClient.prefetchQuery({
+    queryKey: ['userAuthenticated'],
+    queryFn: getUserAuthenticated,
+  })
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  }
 }

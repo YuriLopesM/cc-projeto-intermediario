@@ -1,37 +1,24 @@
-import { Client, getClients } from "@/actions/clients";
-import BackButton from "@/components/BackButton";
-import { useState, FormEvent } from "react";
-import { QueryClient, dehydrate, useQuery } from "react-query";
+import { BackButton } from '@/components'
+import { getClients } from '@/services'
+import { Client } from '@/types'
+import { useState } from 'react'
+import { QueryClient, dehydrate, useQuery } from 'react-query'
 
 export default function PatientSearch() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedClientId, setSelectedClientId] = useState('')
 
-  const clients = useQuery({ queryKey: ["client"], queryFn: getClients });
-
-  const [selectedClientId, setSelectedClientId] = useState("");
+  const clients = useQuery({ queryKey: ['client'], queryFn: getClients })
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    patientSearch();
-  };
-
-  const patientSearch = () => {
-    const filteredClients = clients.data?.filter((client: Client) =>
-      client.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setSelectedClientId("");
-  
-  };
+    setSearchTerm(event.target.value)
+  }
 
   const toggleClientDetails = (clientId: string) => {
     setSelectedClientId((prevSelectedClientId) =>
-      prevSelectedClientId === clientId ? "" : clientId
-    );
-  };
+      prevSelectedClientId === clientId ? '' : clientId
+    )
+  }
 
   return (
     <div className="container mx-auto py-8">
@@ -39,21 +26,13 @@ export default function PatientSearch() {
       <h1 className="text-2xl font-bold text-blue-950 mb-4 pl-1">
         Buscar Pacientes
       </h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Digite o nome do paciente"
-          className="border border-gray-300 rounded-md px-4 py-2 w-96"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-        <button
-          type="submit"
-          className="bg-blue-950 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-md ml-4"
-        >
-          Buscar
-        </button>
-      </form>
+      <input
+        type="text"
+        placeholder="Digite o nome do paciente"
+        className="border border-gray-300 rounded-md px-4 py-2 w-96"
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
 
       <div className="mt-8">
         {clients.data?.filter((client: Client) =>
@@ -88,7 +67,7 @@ export default function PatientSearch() {
         )}
       </div>
 
-      {selectedClientId !== "" && (
+      {selectedClientId !== '' && (
         <div className="bg-gray-200 p-4 mt-4">
           <h2 className="text-lg font-bold text-gray-800">
             Detalhes do Cliente
@@ -101,8 +80,8 @@ export default function PatientSearch() {
                 <p>Número: {client.number}</p>
                 <p>CPF: {client.cpf}</p>
                 <p>
-                  Endereço: {client.address.street}, {client.address.number} -{" "}
-                  {client.address.neighborhood}, {client.address.city},{" "}
+                  Endereço: {client.address.street}, {client.address.number} -{' '}
+                  {client.address.neighborhood}, {client.address.city},{' '}
                   {client.address.state}
                 </p>
               </div>
@@ -110,20 +89,20 @@ export default function PatientSearch() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 export async function getStaticProps() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient()
 
   await queryClient.prefetchQuery({
-    queryKey: ["client"],
+    queryKey: ['client'],
     queryFn: getClients,
-  });
+  })
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
-  };
+  }
 }

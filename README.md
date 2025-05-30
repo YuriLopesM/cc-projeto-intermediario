@@ -1,6 +1,7 @@
 # ABP-Front-End - Agende Aqui
 
 <!-- Subtítulo do Projeto -->
+
 Projeto de ABP da matéria de Front End do curso de Engenharia de Software da UniSatc.
 
 ## Sobre
@@ -56,7 +57,6 @@ Abaixo, a equipe envolvida neste projeto.
 <li><a href="https://github.com/judwluca">Julia De Luca</a></li>
 <li><a href="https://github.com/luzbrendaoliv">Luz Brenda  Oliveira</a></li>
 </ul>
-
 
 ## Figma
 
