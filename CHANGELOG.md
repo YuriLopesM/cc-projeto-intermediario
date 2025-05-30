@@ -6,6 +6,11 @@
 
 - feat/changelog
   - Adicionado o arquivo CHANGELOG.md para controlar alterações no desenvolvimento.
+- feat/tests
+  - Criada pasta `__tests__` para inclusão dos testes unitários.
+  - Criado suíte de testes para: 
+    - health-center/index
+    - health-center/appointments
 
 ### Refactor
 
