@@ -8,9 +8,11 @@
   - Adicionado o arquivo CHANGELOG.md para controlar alterações no desenvolvimento.
 - feat/tests
   - Criada pasta `__tests__` para inclusão dos testes unitários.
-  - Criado suíte de testes para: 
+  - Criado suíte de testes para:
     - health-center/index
     - health-center/appointments
+- feat/ci
+  - Adicionado GitHub Actions para buildar e rodar o lint automaticamente em cada push.
 
 ### Refactor
 
@@ -45,4 +47,3 @@
   - Melhora legibilidade, organização e estrutura do código em diversas páginas.
   - Remove o submit na pesquisa do paciente na página `patient-search.tsx`, pois já estava sendo feito a filtragem ao digitar.
   - Remove o `selected` em `<option>` do campo de seleção, pois é depreciado.
-
